@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import OptionComponent from "./OptionResponse";
 
 
-const RadioComponent = ({questionID , question}) => {
+const RadioComponent = ({idx,response, questionID , question, handleResponseChange, handleResponseContentChange}) => {
     const QuestionID = {questionID};
     return (
     <div key={`{question.label}`}>

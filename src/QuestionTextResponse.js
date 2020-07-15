@@ -5,13 +5,30 @@ import PropTypes from 'prop-types';
 import OptionComponent from './QuestionResponse';
 
 
-const TextComponent = ({questionID, question }) => {
+
+const TextComponent = ({idx,response, questionID, question, handleResponseChange, handleResponseContentChange }) => {
+
     const QuestionID = {questionID};
+
+    const [TextContent, setTextContent] = useState(response.content);
+
+    const handleTextResponseChange = (e) => {
+        handleResponseChange(e.target.value, idx)
+    };
+
     return (
         <div key={`{question.label}`}>
             <label htmlFor='{QuestionID}'>{question.label}   :</label>
             <label htmlFor='{QuestionID}1'>{question.content}</label>
-            <input></input>
+            <input
+            type="text"
+                name={'text-{idx}'}
+                data-idx={idx}
+                id={idx}
+                className="name"
+                value={TextContent.value}
+                handleTextResponseChange = {handleTextResponseChange}
+            />
         </div>
     );
 };
