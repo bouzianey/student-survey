@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import logo from "./logo.svg";
-import "./App.css";
+import logo from "../logo.svg";
+import "../App.css";
 import PropTypes from 'prop-types';
 import OptionComponent from './QuestionResponse';
 

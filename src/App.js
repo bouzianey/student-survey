@@ -1,83 +1,90 @@
-import React, { useState } from "react";
-import logo from "./logo.svg";
-import "./App.css";
-import TextComponent from './QuestionTextResponse';
-import RadioComponent from './QuestionRadioResponse';
+import React, {useState} from "react";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import Navigation from "./components/Navigation";
+import Footer from "./components/Footer";
+import Home from "./components/Home";
+import About from "./components/About";
+import Contact  from "./components/Contact";
+import SignInForm from "./components/SignIn"
+import LogOutForm from "./components/LogOut"
+import DisplayStudentSurvey from "./components/DisplayStudentSurveyList";
+
+
 
 function App() {
 
-  const [studentSurvey, setStudentSurvey] = useState([]);
-  const [Response, setResponse] = useState([]);
+        const [loggedInStatus, setloggedInStatus] = useState("NOT_LOGGED_IN");
+        const [user, setUser] = useState({});
 
-    const addResponse = (question) => {
-        const newResponse = {  label: `Question #${question.length+1}`, type: question.type , repetition: question.repetition, surveyID: question.survey_id }
-        if(question.type === 'radio') newResponse.options = [{content:'', label:'' , questionID : question.id}];
-        else newResponse.content=  '';
-        setResponse([...Response, newResponse]);
-        return newResponse
-    };
+  const checkLoginStatus= (id) => {
 
-    const handleResponseChange = (newResponse, idx) => {
-        const newResponses = [...Response];
-        newResponses[idx].options = newResponse;
-        setResponse(newResponses);
-
-    }
-
-    const handleResponseContentChange = (val, idx) => {
-
-        const newResponses = [...Response];
-        newResponses[idx].content = val;
-        setResponse(newResponses);
-
-    };
-      const displaySurvey = e => {
-            e.preventDefault();
-            const objectToSend = {
-            }
-
-        fetch("http://localhost:5000/get_api", {
-          headers: {
-            "Content-type": "application/json",
-          },
-        })
-          .then((res) => res.json())
-          .then((res) => setStudentSurvey(res));
-      };
-      const submitSurveyResponse = e => {
-            e.preventDefault();
-            const objectToSend = {
-                survey: studentSurvey.surveyName,
-                instructor: studentSurvey.InstructorName,
-                surveyID : studentSurvey.survey_id,
-                responseList: Response
-            }
-
-            fetch('http://localhost:5000/get_survey_response', {
-                method: 'POST',
+    fetch("http://localhost:5000/login_instructor", {
+                method: "POST",
                 headers: {
-                'Content-type': 'application/json',
-            },
-                body: JSON.stringify(objectToSend),
-            }).then(res => res.json())
-                .then(res => console.log(res));
-        }
+                "Content-type": "application/json",
+              },
+                body: JSON.stringify(id),
+            })
+              .then((res) => res.json())
+              .then((res) => {
+                     if (
+                          res.data.logged_in &&
+                          this.state.loggedInStatus === "NOT_LOGGED_IN"
+                        ) {
+                          this.setState({
+                            loggedInStatus: "LOGGED_IN",
+                            user: res.data.user
+                          });
+                        } else if (
+                          !res.data.logged_in &
+                          (this.state.loggedInStatus === "LOGGED_IN")
+                        ) {
+                          this.setState({
+                            loggedInStatus: "NOT_LOGGED_IN",
+                            user: {}
+                          });
+                          }
+              });
+  }
 
+  const componentDidMount= () => {
+    this.checkLoginStatus();
+  }
+
+  const handleLogout = (val) => {
+
+      setloggedInStatus(val);
+      setUser({});
+      console.log("Log out : ",loggedInStatus);
+
+  }
+
+  const handleLogin = (data) => {
+      console.log(data);
+    setloggedInStatus("LOGGED_IN")
+      setUser(data)
+  }
 
   return (
     <div className="App">
-      <input type="submit" onClick={displaySurvey} value="Display Survey" />
-        <label htmlFor='SurveyName'>  Survey Name : {studentSurvey.surveyName}</label>
-        <label htmlFor='InstructorName'>  Instructor Name : {studentSurvey.InstructorName}</label>
-        <label htmlFor='SurveyID'>  Survey ID : {studentSurvey.survey_id}</label>
-      {studentSurvey.questionList &&
-        studentSurvey.questionList.map((question, idx) => (
-          <>
-              addResponse(question)
-            {(question.type === "radio") ? <RadioComponent idx = {idx} questionID={question.id} response={Response} question={question} handleResponseChange = {handleResponseChange} handleResponseContentChange = {handleResponseContentChange}/> : <TextComponent idx = {idx} questionID={question.id} question={question} handleResponseChange = {handleResponseChange} handleResponseContentChange = {handleResponseContentChange} /> }
-          </>
-        ))}
-        <input type="submit" onClick={submitSurveyResponse} value="Submit Response" />
+      <Router>
+        <Navigation loggedInStatus={loggedInStatus}/>
+        <Switch>
+          <Route path="/" exact component={() => <Home />} />
+          <Route path="/SurveyResponse"
+                 exact component={() => loggedInStatus  === "LOGGED_IN" ? <DisplayStudentSurvey  user={user}/> : ""}
+          />
+          <Route path="/SignIn"
+                 exact component={() => loggedInStatus  === "NOT_LOGGED_IN" ? <SignInForm  onChangeLogin={handleLogin}/> : ""}
+          />
+          <Route path="/LogOut"
+                 exact component={() => loggedInStatus  === "LOGGED_IN" ? <LogOutForm onChangeLogout={handleLogout} /> : ""}
+          />
+          <Route path="/contact" exact component={() => <Contact />} />
+          <Route path="/about" exact component={() => <About />} />
+        </Switch>
+        <Footer />
+      </Router>
     </div>
   );
 }
