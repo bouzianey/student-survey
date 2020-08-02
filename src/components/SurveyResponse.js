@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import "../App.css";
 import TextComponent from './QuestionTextResponse';
 import RadioComponent from './QuestionRadioResponse';
+import './popup_window.css'
+import './SignIn.css'
 
 const SurveyResponse = ({user, surveyID, onChangeClose}) => {
 
@@ -122,9 +124,21 @@ const SurveyResponse = ({user, surveyID, onChangeClose}) => {
         {
                 isDisplayed == true ? displaySurvey() : ""
         }
-        <label htmlFor='SurveyName'>  Survey Name : {studentSurvey.surveyName}</label>
-        <label htmlFor='InstructorName'>  Instructor Name : {studentSurvey.InstructorName}</label>
-        <label htmlFor='SurveyID'>  Survey ID : {studentSurvey.survey_id}</label>
+        <table border={0} id="1" align="center">
+            <tr>
+                <td colSpan={2}>
+        <label htmlFor='SurveyName'><b> Survey Name :</b> {studentSurvey.surveyName}</label>
+                </td>
+            </tr>
+            <tr>
+                <td>
+        <label htmlFor='InstructorName'><b>Instructor Name :</b> {studentSurvey.InstructorName}</label>
+                </td>
+                <td>
+        <label htmlFor='SurveyID'><b>Survey ID : </b> {studentSurvey.survey_id}</label>
+                </td>
+            </tr>
+        </table>
       {studentSurvey.questionList &&
         studentSurvey.questionList.map((question, i) => (
           <>
@@ -134,7 +148,7 @@ const SurveyResponse = ({user, surveyID, onChangeClose}) => {
           </>
         ))}
         <input type="submit" className="btn-cancel" onClick={handleCloseChange} value="Close"/>
-        <input type="submit" onClick={submitSurveyResponse} value="Submit Response" />
+        <input type="submit" className="btn-primary" onClick={submitSurveyResponse} value="Submit Response" />
     </div>
   );
 }

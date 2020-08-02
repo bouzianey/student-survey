@@ -64,7 +64,7 @@ const DisplayStudentSurvey = ({user}) =>{
             {
                 studentSurveyList.map((surveyList, idx) => (
                     <tr>
-                        <td><b>{surveyList.surveyID}: </b></td><td><b>Name :</b> {surveyList.name} </td><td><b>Date :</b> {surveyList.date} </td>
+                        <td><b>{surveyList.surveyID} : </b></td><td><b>Name : </b> {surveyList.name} </td><td><b> Date :</b> {surveyList.date} </td>
                         <td><input type="submit" className="btn-primary" onClick={(id) =>displaySurvey(surveyList.surveyID)}  value="Display Survey" /></td>
                     </tr>
 
