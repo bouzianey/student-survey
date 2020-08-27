@@ -1,8 +1,8 @@
-import React, { useState } from "react";
-import logo from "../logo.svg";
+import React from "react";
 import "../App.css";
 import PropTypes from 'prop-types';
 import OptionComponent from "./OptionResponse";
+import "./Styling.css";
 
 
 const RadioComponent = ({ i, question, onRadioChange}) => {
@@ -14,23 +14,35 @@ const RadioComponent = ({ i, question, onRadioChange}) => {
         content : val,
         question_id :question.id
     }
-            onRadioChange(idx,question.student_id, question.id, obj);
+            onRadioChange(i,idx,question.student_id, question.id, obj);
 
   };
 
   return (
      <div key={`{question.label}`}>
         <p>
-        <label htmlFor='{QuestionID}'>{question.label} :  {question.student_name} </label>
+        <h5 htmlFor='{QuestionID}'>{question.label} :  {question.student_name} </h5>
         </p>
-         <p>
+         <table className="table-grid" border={0}>
+             <thead align="center">
+                <tr>
+                        <th></th>
+                        <th>Strongly disagree</th>
+                        <th>Disagree</th>
+                        <th>Neutral</th>
+                        <th>Agree</th>
+                        <th>Strongly agree</th>
+                </tr>
+            </thead>
+            <tbody align="center">
       {question.options &&
         question.options.map((option, idx) => (
           <>
             { <OptionComponent idx={idx} i ={i} option={option} onOptionChange={handleRadioResponseChange} /> }
           </>
         ))}
-        </p>
+            </tbody>
+        </table>
     </div>
   );
 };

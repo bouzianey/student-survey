@@ -1,18 +1,41 @@
 import React, { useState } from "react";
 import "../App.css";
+import "./Styling.css";
 import TextComponent from './QuestionTextResponse';
 import RadioComponent from './QuestionRadioResponse';
-import './popup_window.css'
-import './SignIn.css'
 
 const SurveyResponse = ({user, surveyID, onChangeClose}) => {
 
         const [studentSurvey, setStudentSurvey] = useState([]);
         const [responses, setResponses] = useState([]);
         const [isDisplayed, setIsDisplayed] = useState(true);
+        const [isFormErrorDisplayed, setIsFormErrorDisplayed] = useState(false);
+        const [formErrorsState, setformErrorsState] = useState([]);
+        const [formResultState, setformResultState] = useState("");
 
+        const iniatializeFormError = () => {
 
-        const handleTextChange = (questionId, std_id, value) => {
+            if(formErrorsState.length === 0){
+
+                    Object.values(studentSurvey.questionList).forEach(val => {
+                    formErrorsState.push({check_point: "invalid"});
+                });
+
+            }
+            setIsFormErrorDisplayed(false);
+        }
+        const formValid = () => {
+
+            let valid = true;
+            console.log(formErrorsState);
+            // validate form errors being empty & the form was filled out
+            Object.values(formErrorsState).forEach(val => {
+              val.check_point === "invalid" && (valid = false);
+            });
+
+            return valid;
+        };
+        const handleTextChange = (i, questionId, std_id, value) => {
             const newTextResponses = [...responses];
             let textItem;
 
@@ -33,31 +56,56 @@ const SurveyResponse = ({user, surveyID, onChangeClose}) => {
                 textItem.content = value;
             }
             setResponses(newTextResponses);
+
+            if(value.length === 0){
+
+                formErrorsState[i].check_point= "invalid";
+            }
+            else
+            {
+                formErrorsState[i].check_point= "valid";
+            }
         }
 
-        const handleRadioChange = (idx, std_id, questionId, value) => {
+        const handleRadioChange = (i , idx, std_id, questionId, value) => {
 
             const newRadioResponses = [...responses];
+            let rps = {};
+            let checker = "valid";
 
             for(let newResponse of newRadioResponses)
             {
                 if (questionId === newResponse.questionId && !std_id) {
 
                     newResponse.options[idx] = value;
+                    rps = newResponse
                     break;
 
                 } else if(newResponse.studentId && std_id === newResponse.studentId && questionId === newResponse.questionId) {
 
                     newResponse.options[idx] = value;
+                    rps = newResponse
                     break;
                 }
             }
             setResponses(newRadioResponses);
+
+            Object.values(rps.options).forEach(val => {
+                val.content === "" && (checker = "invalid");
+                console.log(checker);
+            });
+
+            if(checker === "valid"){
+                formErrorsState[i].check_point = "valid";
+            }
+            else{
+                formErrorsState[i].check_point = "invalid";
+            }
         }
 
-        const handleCloseChange = e => {
+        const handleCloseChange = (val) => {
 
-            onChangeClose();
+            onChangeClose(val);
         }
         const displaySurvey = e => {
 
@@ -90,65 +138,72 @@ const SurveyResponse = ({user, surveyID, onChangeClose}) => {
                           if (question.type === "radio") {
 
                               responseToPush.options = []
+
+                              question.options.forEach(val => {
+                                  const obj = {
+                                        content : "",
+                                        question_id :question.id
+                                  }
+                                  responseToPush.options.push(obj)
+                              })
                           }
                           responses.push(responseToPush)
                       }
                   );
-                  setResponses(responses)
-                  setStudentSurvey(res)
+                  setResponses(responses);
+                  setStudentSurvey(res);
+                  setIsFormErrorDisplayed(true);
               });
       };
       const submitSurveyResponse = e => {
-            e.preventDefault();
-            const objectToSend = {
-                survey: studentSurvey.surveyName,
-                instructor: studentSurvey.InstructorName,
-                studentID: studentSurvey.studentid,
-                surveyID : studentSurvey.survey_id,
-                responseList: responses
-            }
-            console.log(objectToSend)
-            fetch('http://localhost:5000/post_survey_response', {
-            method: 'POST',
-            headers: {
-            'Content-type': 'application/json',
-        },
-            body: JSON.stringify(objectToSend),
-        }).then(res => res.json())
-            .then(res => console.log(res));
-        }
 
+            e.preventDefault();
+            if(formValid()){
+
+                const objectToSend = {
+                    survey: studentSurvey.surveyName,
+                    instructor: studentSurvey.InstructorName,
+                    studentID: studentSurvey.studentid,
+                    surveyID : studentSurvey.survey_id,
+                    responseList: responses
+                }
+                setformResultState("Survey was successfully submitted");
+                fetch('http://localhost:5000/post_survey_response', {
+                method: 'POST',
+                headers: {
+                'Content-type': 'application/json',
+                },
+                body: JSON.stringify(objectToSend),
+                }).then(res => res.json())
+                handleCloseChange("Survey was successfully submitted");
+
+            }else{
+                setformResultState("Survey Invalid! make sure you answer all questions");
+            }
+      }
 
   return (
     <div className="App">
         {
-                isDisplayed == true ? displaySurvey() : ""
+            isDisplayed === true ? displaySurvey() : ""
         }
-        <table border={0} id="1" align="center">
-            <tr>
-                <td colSpan={2}>
-        <label htmlFor='SurveyName'><b> Survey Name :</b> {studentSurvey.surveyName}</label>
-                </td>
-            </tr>
-            <tr>
-                <td>
-        <label htmlFor='InstructorName'><b>Instructor Name :</b> {studentSurvey.InstructorName}</label>
-                </td>
-                <td>
-        <label htmlFor='SurveyID'><b>Survey ID : </b> {studentSurvey.survey_id}</label>
-                </td>
-            </tr>
-        </table>
+        {
+            isFormErrorDisplayed === true ? iniatializeFormError() : ""
+        }
+        <h5 align="center">  Survey Name : {studentSurvey.surveyName}</h5>
       {studentSurvey.questionList &&
         studentSurvey.questionList.map((question, i) => (
           <>
             {
-                (question.type === "radio") ? <RadioComponent key={question.id} i={i} question={question} onRadioChange={handleRadioChange}/> : <TextComponent key={question.id} question={question} onTextChange = {handleTextChange} />
+                (question.type === "radio") ? <RadioComponent key={question.id} i={i} question={question} onRadioChange={handleRadioChange}/> : <TextComponent i={i} key={question.id} question={question} onTextChange = {handleTextChange} />
             }
           </>
         ))}
-        <input type="submit" className="btn-cancel" onClick={handleCloseChange} value="Close"/>
+        <input type="submit" className="btn-danger" onClick={(id) =>handleCloseChange("")}value="Close"/>
         <input type="submit" className="btn-primary" onClick={submitSurveyResponse} value="Submit Response" />
+        {formResultState === "Survey Invalid! make sure you answer all questions" && (
+                    <span className="errorMessage">{formResultState}</span>
+        )}
     </div>
   );
 }

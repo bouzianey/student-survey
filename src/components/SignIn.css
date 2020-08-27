@@ -10,13 +10,13 @@ light green: #A3C4BC
   margin-left: 1%;
 }
 .wrapper {
-  height: 100vh;
+  max-height: fit-content;
   width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: #258ea6;
+  background-color: white;
 }
 
 .form-wrapper {

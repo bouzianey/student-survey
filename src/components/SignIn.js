@@ -6,39 +6,33 @@ const SignInForm = ({onChangeLogin}) => {
 
     const [emailState, setemailState] = useState(null);
     const [passwordState, setpasswordState] = useState(null);
+    const [surveySuccessState, setSurveySuccessState] = useState("");
     const [formErrorsState, setformErrorsState] = useState({email:"", password:""});
 
     const emailRegex = RegExp(
   /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
     );
 
-    const formValid = ({ formErrorsState, ...rest }) => {
+    const formValid = () => {
       let valid = true;
-
-
-      // validate form errors being empty
+      // validate form errors being empty & the form was filled out
       Object.values(formErrorsState).forEach(val => {
         val.length > 0 && (valid = false);
-      });
-
-      // validate the form was filled out
-      Object.values(rest).forEach(val => {
-        val === null && (valid = false);
       });
 
       return valid;
     };
 
   const handleSubmit = (e) => {
-    e.preventDefault();
 
-    console.log(emailState, passwordState);
-    if (formValid) {
+    e.preventDefault();
+    if (formValid()) {
 
       const objectToSend = {
             email: emailState,
             password: passwordState
         }
+        console.log(objectToSend);
       fetch("http://localhost:5000/login_student", {
                 method: "POST",
                 headers: {
@@ -52,10 +46,14 @@ const SignInForm = ({onChangeLogin}) => {
                   if (res.logged_in){
                       onChangeLogin(res.user)
                   }
+                   else
+                  {
+                      setSurveySuccessState("Invalid Email Address or/and Password");
+                  }
               });
     }
     else {
-      console.error("FORM INVALID - DISPLAY ERROR MESSAGE");
+        setSurveySuccessState("Error! ALL fields are required");
     }
   };
 
@@ -107,8 +105,10 @@ const SignInForm = ({onChangeLogin}) => {
             </div>
             <div className="createAccount">
               <button type="submit">Sign In</button>
-              <small>Forgot your password?</small>
             </div>
+              {surveySuccessState.length > 0 && (
+                <span className="errorMessage">{surveySuccessState}</span>
+            )}
           </form>
         </div>
       </div>

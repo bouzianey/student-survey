@@ -6,25 +6,25 @@ import OptionComponent from './QuestionResponse';
 
 
 
-const TextComponent = ({ question, onTextChange}) => {
+const TextComponent = ({i, question, onTextChange}) => {
 
   const [textContent, setTextContent] = useState("");
 
   const handleTextResponseChange = (e) => {
     const value = e.target.value;
       setTextContent(value);
-      onTextChange(question.id, question.student_id, value);
+      onTextChange(i, question.id, question.student_id, value);
 
   };
 
   return (
       <div>
-          <p><label htmlFor='{question.id}'>{question.label}  :  {question.student_name}</label></p>
-          <p><label htmlFor='{question.id}1'>{question.content}</label>
+          <p><h5 htmlFor='{question.id}'>{question.label}  :  {question.student_name}</h5></p>
+          <p><h6 htmlFor='{question.id}1'>{question.content}</h6>
           <input
               type="text"
               name='text'
-              className="name"
+              className={textContent.length === 0 ? "error" : null}
               value={textContent}
               onChange={handleTextResponseChange}
           />

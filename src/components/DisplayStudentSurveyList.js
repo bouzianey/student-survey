@@ -1,40 +1,89 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import SurveyResponse from './SurveyResponse';
+import { MDBDataTable } from 'mdbreact';
 import './popup_window.css'
 import './SignIn.css'
 
 const DisplayStudentSurvey = ({user}) =>{
 
         const [studentSurveyList, setStudentSurveyList] = useState([]);
-        const [studentSurveyQuestion, setStudentSurveyQuestion] = useState([]);
-        const [studentSurvey, setStudentSurvey] = useState([]);
+        const [resultState, setResultState] = useState("");
         const [survey_id, setSurveyID] = useState("");
         const [isShown, setShown] = useState(false);
         const [isShownButton, setShownButton] = useState(false);
         const [isShownModButton, setShownModButton] = useState(false);
-        const [isDisplayed, setIsDisplayed] = useState(true);
+        const [dataObj, setDataObj] = useState({});
 
-         const displaySurveyList = e => {
+        useEffect(() => {
 
-            setIsDisplayed(false);
+            const displaySurveyList = e => {
 
-            const objectToSend2 = {
-                    id : user.id,
-                }
-
+            const objToSend={
+             id : user.id
+            };
             fetch("http://localhost:5000/get_student_survey_list", {
                 method: "POST",
                 headers: {
                 "Content-type": "application/json",
               },
-                body: JSON.stringify(objectToSend2),
+                body: JSON.stringify(objToSend),
             })
               .then((res) => res.json())
               .then((res) => {
                     setStudentSurveyList(res);
+
+                    const data = {
+                              columns: [
+                                {
+                                  label: 'ID',
+                                  field: 'ID',
+                                  sort: 'asc',
+                                  width: 150
+                                },
+                                {
+                                  label: 'Name',
+                                  field: 'Name',
+                                  sort: 'asc',
+                                  width: 270
+                                },
+                                {
+                                  label: 'Date',
+                                  field: 'Date',
+                                  sort: 'asc',
+                                  width: 200
+                                },{
+                                  label: 'Status',
+                                  field: 'Status',
+                                  sort: 'asc',
+                                  width: 100
+                                },
+                                {
+                                  label: 'Button',
+                                  field: 'Button',
+                                  sort: 'asc',
+                                  width: 100
+                                }
+                              ]
+                    }
+                 const rowList = [];
+                for (const surveyList of res) {
+
+                  const rowObj = {
+                    ID: surveyList.surveyID,
+                    Name: surveyList.name,
+                    Date: surveyList.date,
+                    Status: "Not Completed",
+                    Button: <input type="submit" className="btn-primary" onClick={(id) =>displaySurvey(surveyList.surveyID)}  value="Display Survey" />
+
+                  }
+                  rowList.push(rowObj);
+                }
+                data.rows = rowList;
+                setDataObj(data);
               });
       };
-
+    displaySurveyList();
+  }, []);
         const displaySurvey = (id) => {
 
             setSurveyID(id);
@@ -43,40 +92,46 @@ const DisplayStudentSurvey = ({user}) =>{
       };
             const openForm_Instructions = () => {
                 document.getElementById("instructionForm").style.display = "block";
+                document.getElementById("DataGrid").style.display = "none";
                 setShownButton(true);
             };
             const closeForm_Instructions = () => {
                 document.getElementById("instructionForm").style.display = "none";
+                document.getElementById("DataGrid").style.display = "block";
                 setShownButton(false);
                 setShownModButton(false);
             };
-            const handleButtonCloseChange = e => {
+            const handleButtonCloseChange = (val) => {
                 setShown(false);
+                setResultState(val);
+                if (val.length > 0)
+                {
+                    document.getElementById("popup-alert").style.display = "block";
+                }
                 closeForm_Instructions();
             }
 
   return (
     <div className="wrapper" id="1">
-        {
-                isDisplayed == true ? displaySurveyList() : ""
-        }
-        <table border={2} id="1">
-            {
-                studentSurveyList.map((surveyList, idx) => (
-                    <tr>
-                        <td><b>{surveyList.surveyID} : </b></td><td><b>Name : </b> {surveyList.name} </td><td><b> Date :</b> {surveyList.date} </td>
-                        <td><input type="submit" className="btn-primary" onClick={(id) =>displaySurvey(surveyList.surveyID)}  value="Display Survey" /></td>
-                    </tr>
-
-                ))
-            }
-        </table>
-        <br/>
+        <h2>List of Current Surveys</h2>
+        <div id="DataGrid">
+            <MDBDataTable
+                striped
+                bordered
+                small
+                data={dataObj}
+              />
+        </div>
         <div className="form-popup" id="instructionForm">
 
               {
-                  isShown == true ? <SurveyResponse user={user} surveyID={survey_id} onChangeClose={handleButtonCloseChange}/> : ""
+                  isShown === true ? <SurveyResponse user={user} surveyID={survey_id} onChangeClose={handleButtonCloseChange}/> : ""
               }
+        </div>
+        <div key="popup-alert" className="pop-alter-box" id="popup-alert">
+            {resultState === "Survey was successfully submitted" && (
+                    <span className="badge-success">{resultState}</span>
+        )}
         </div>
 
     </div>

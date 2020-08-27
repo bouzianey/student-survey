@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 
 
 
+
 const OptionComponent = ({ idx, i,  questionID, option, onOptionChange}) => {
 
     const [OptionContent, setOptionContent] = useState("");
@@ -16,16 +17,24 @@ const OptionComponent = ({ idx, i,  questionID, option, onOptionChange}) => {
 
   };
     return (
-    <div key={i}>
-
-        <label htmlFor='{optionID}'>{option.content}</label>
-        <input type="radio" id="1" name={i+n} value="1" onChange={handleOptionResponseChange}/>
-        <input type="radio" id="2" name={i+n} value="2" onChange={handleOptionResponseChange}/>
-        <input type="radio" id="3" name={i+n} value="3" onChange={handleOptionResponseChange}/>
-        <input type="radio" id="4" name={i+n} value="4" onChange={handleOptionResponseChange}/>
-        <input type="radio" id="5" name={i+n} value="5" onChange={handleOptionResponseChange}/>
-
-    </div>
+        <tr key={i} >
+            <td><h6 htmlFor='{optionID}'>{option.content}</h6></td>
+            <td>
+                <input className="" type="radio" id="1" name={i+n} value="1" onChange={handleOptionResponseChange}/>
+            </td>
+            <td>
+                <input className="" type="radio" id="2" name={i+n} value="2" onChange={handleOptionResponseChange}/>
+            </td>
+            <td>
+                <input className="" type="radio" id="3" name={i+n} value="3" onChange={handleOptionResponseChange}/>
+            </td>
+            <td>
+                <input className="" type="radio" id="4" name={i+n} value="4" onChange={handleOptionResponseChange}/>
+            </td>
+            <td>
+                <input className="" type="radio" id="5" name={i+n} value="5" onChange={handleOptionResponseChange}/>
+            </td>
+        </tr>
   );
 };
 

@@ -1,73 +1,84 @@
 import React from "react";
 import { Link, withRouter } from "react-router-dom";
-
+import home_icon from "../static/survey-icon.png"
 
 function Navigation(props) {
-  console.log(props.loggedInStatus);
   return (
     <div className="navigation">
-      <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+      <nav className="navbar navbar-expand-lg navbar-dark bg-info">
         <div className="container">
+
           <Link className="navbar-brand" to="/">
-            Smart Survey
+            <img src={home_icon} alt="avatar" width="8%"/>
           </Link>
           <button
-            className="navbar-toggler"
-            type="button"
-            data-toggle="collapse"
-            data-target="#navbarResponsive"
-            aria-controls="navbarResponsive"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
+              className="navbar-toggler"
+              type="button"
+              data-toggle="collapse"
+              data-target="#navbarResponsive"
+              aria-controls="navbarResponsive"
+              aria-expanded="false"
+              aria-label="Toggle navigation"
           >
-            <span class="navbar-toggler-icon"></span>
+            <span className="navbar-toggler-icon"></span>
           </button>
           <div className="collapse navbar-collapse" id="navbarResponsive">
             <ul className="navbar-nav ml-auto">
               <li
-                className={`nav-item  ${
-                  props.location.pathname === "/" ? "active" : ""
-                }`}
+                  className={`nav-item  ${
+                      props.location.pathname === "/" ? "active" : ""
+                  }`}
               >
                 <Link className="nav-link" to="/">
                   Home
                   <span className="sr-only">(current)</span>
                 </Link>
               </li>
-               { props.loggedInStatus == "NOT_LOGGED_IN" ?
-              <li
-                  className={`nav-item  ${
-                      props.location.pathname === "/SignIn" ? "active" : ""
-                  }`}
-              >
-                <Link className="nav-link" to="/SignIn">
-                  Sign in
-                </Link>
-              </li>
+              {props.loggedInStatus === "NOT_LOGGED_IN" ?
+                  <li
+                      className={`nav-item  ${
+                          props.location.pathname === "/SignIn" ? "active" : ""
+                      }`}
+                  >
+                    <Link className="nav-link" to="/SignIn">
+                      Sign in
+                    </Link>
+                  </li>
                   : ""
               }
-              { props.loggedInStatus == "LOGGED_IN"  ?
-              <li
-                  className={`nav-item  ${
-                      props.location.pathname === "/SurveyResponse" ? "active" : ""
-                  }`}
-              >
-                <Link className="nav-link" to="/SurveyResponse">
-                  SurveyResponse
-                </Link>
-              </li>: ""
-              }
 
-              { props.loggedInStatus == "LOGGED_IN"  ?
-                <li
-                  className={`nav-item  ${
-                      props.location.pathname === "/LogOut" ? "active" : ""
-                  }`}
-              >
-                <Link className="nav-link" to="/LogOut">
-                  Log out
-                </Link>
-              </li> : ""
+              {props.loggedInStatus === "LOGGED_IN" ?
+                  <li
+                      className={`nav-item  ${
+                          props.location.pathname === "/SurveyResponse" ? "active" : ""
+                      }`}
+                  >
+                    <Link className="nav-link" to="/SurveyResponse">
+                      Current Surveys
+                    </Link>
+                  </li> : ""
+              }
+              {props.loggedInStatus === "LOGGED_IN" ?
+                  <li
+                      className={`nav-item  ${
+                          props.location.pathname === "/FeedbackList" ? "active" : ""
+                      }`}
+                  >
+                    <Link className="nav-link" to="/FeedbackList">
+                      Feedbacks
+                    </Link>
+                  </li> : ""
+              }
+              {props.loggedInStatus === "LOGGED_IN" ?
+                  <li
+                      className={`nav-item  ${
+                          props.location.pathname === "/LogOut" ? "active" : ""
+                      }`}
+                  >
+                    <Link className="nav-link" to="/LogOut">
+                      Logout
+                    </Link>
+                  </li> : ""
               }
               <li
                   className={`nav-item  ${

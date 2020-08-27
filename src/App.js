@@ -8,6 +8,7 @@ import Contact  from "./components/Contact";
 import SignInForm from "./components/SignIn"
 import LogOutForm from "./components/LogOut"
 import DisplayStudentSurvey from "./components/DisplayStudentSurveyList";
+import DisplayFeedbackList from "./components/FeedbackList";
 
 
 
@@ -73,6 +74,9 @@ function App() {
           <Route path="/" exact component={() => <Home />} />
           <Route path="/SurveyResponse"
                  exact component={() => loggedInStatus  === "LOGGED_IN" ? <DisplayStudentSurvey  user={user}/> : ""}
+          />
+          <Route path="/FeedbackList"
+                 exact component={() => loggedInStatus  === "LOGGED_IN" ? <DisplayFeedbackList  user={user}/> : ""}
           />
           <Route path="/SignIn"
                  exact component={() => loggedInStatus  === "NOT_LOGGED_IN" ? <SignInForm  onChangeLogin={handleLogin}/> : ""}
