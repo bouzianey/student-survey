@@ -19,7 +19,7 @@ function App() {
 
   const checkLoginStatus= (id) => {
 
-    fetch("http://localhost:5000/login_instructor", {
+    fetch("https://survey-manager-yb-scsu.herokuapp.com/login_instructor", {
                 method: "POST",
                 headers: {
                 "Content-type": "application/json",

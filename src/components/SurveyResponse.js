@@ -114,7 +114,7 @@ const SurveyResponse = ({user, surveyID, onChangeClose}) => {
                     id : user.id,
                     survey_id : surveyID
                 }
-            fetch("http://localhost:5000/get_student_survey", {
+            fetch("https://survey-manager-yb-scsu.herokuapp.com/get_student_survey", {
                 method: "POST",
                 headers: {
                 "Content-type": "application/json",
@@ -168,7 +168,7 @@ const SurveyResponse = ({user, surveyID, onChangeClose}) => {
                     responseList: responses
                 }
                 setformResultState("Survey was successfully submitted");
-                fetch('http://localhost:5000/post_survey_response', {
+                fetch('https://survey-manager-yb-scsu.herokuapp.com/post_survey_response', {
                 method: 'POST',
                 headers: {
                 'Content-type': 'application/json',

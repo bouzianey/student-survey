@@ -21,7 +21,7 @@ const DisplayStudentSurvey = ({user}) =>{
             const objToSend={
              id : user.id
             };
-            fetch("http://localhost:5000/get_student_survey_list", {
+            fetch("https://survey-manager-yb-scsu.herokuapp.com/get_student_survey_list", {
                 method: "POST",
                 headers: {
                 "Content-type": "application/json",

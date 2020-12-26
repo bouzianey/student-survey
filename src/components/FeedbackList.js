@@ -20,7 +20,7 @@ const DisplayFeedbackList = ({user}) =>{
             const objToSend={
              studentID : user.id
             };
-            fetch("http://localhost:5000/get_instructor_feedback_list", {
+            fetch("https://survey-manager-yb-scsu.herokuapp.com/get_instructor_feedback_list", {
                 method: "POST",
                 headers: {
                 "Content-type": "application/json",

@@ -33,7 +33,7 @@ const SignInForm = ({onChangeLogin}) => {
             password: passwordState
         }
         console.log(objectToSend);
-      fetch("http://localhost:5000/login_student", {
+      fetch("https://survey-manager-yb-scsu.herokuapp.com/login_student", {
                 method: "POST",
                 headers: {
                 "Content-type": "application/json",
