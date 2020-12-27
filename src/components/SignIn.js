@@ -35,9 +35,10 @@ const SignInForm = ({onChangeLogin}) => {
         console.log(objectToSend);
       fetch("https://survey-manager-yb-scsu.herokuapp.com/login_student", {
                 method: "POST",
+                mode: "no-cors",
                 headers: {
                 "Content-type": "application/json",
-                "Access-Control-Allow-Origin":"*"
+                //"Access-Control-Allow-Origin":"*"
               },
                 body: JSON.stringify(objectToSend),
             })
