@@ -24,6 +24,7 @@ const DisplayFeedbackList = ({user}) =>{
                 method: "POST",
                 headers: {
                 "Content-type": "application/json",
+                "Access-Control-Allow-Origin":"*"
               },
                 body: JSON.stringify(objToSend),
             })

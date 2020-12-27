@@ -118,6 +118,7 @@ const SurveyResponse = ({user, surveyID, onChangeClose}) => {
                 method: "POST",
                 headers: {
                 "Content-type": "application/json",
+                "Access-Control-Allow-Origin":"*"
               },
                 body: JSON.stringify(objectToSend1),
             })
