@@ -7,21 +7,18 @@ import "./Styling.css";
 
 const RadioComponent = ({ i, question, onRadioChange}) => {
 
-
   const handleRadioResponseChange = (e, idx, val) => {
-
             const obj = {
         content : val,
         question_id :question.id
     }
             onRadioChange(i,idx,question.student_id, question.id, obj);
-
   };
 
   return (
      <div key={`{question.label}`}>
         <p>
-        <h5 htmlFor='{QuestionID}'>{question.label} :  {question.student_name} </h5>
+        <h5>{question.label} :  {question.student_name} </h5>
         </p>
          <table className="table-grid" border={0}>
              <thead align="center">

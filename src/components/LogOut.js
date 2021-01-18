@@ -1,12 +1,14 @@
 import React, {Component, useState} from "react";
+import {useHistory} from 'react-router-dom';
 import './popup_window.css'
 
 const LogOutForm = ({onChangeLogout}) => {
-    console.log("LogOutForm")
     const [LogStatus, setLogStatus] = useState("NOT_LOGGED_IN");
-
+    //History
+    const history = useHistory();
     const Logout = () => {
         onChangeLogout(LogStatus);
+        history.push("/");
     };
     return (
         <>

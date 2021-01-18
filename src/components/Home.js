@@ -1,7 +1,13 @@
 import React from "react";
 import "./SignIn.css";
+import surveyImage from "../static/online_survey.jpg";
+import SignInForm from './SignIn';
 
-function Home() {
+function Home({onChangeLogin}) {
+  const handleLogin =(data) =>
+  {
+    onChangeLogin(data);
+  }
   return (
     <div className="home">
       <div className="container">
@@ -9,15 +15,12 @@ function Home() {
           <div className="col-lg-7">
             <img
               className="img-fluid rounded mb-4 mb-lg-0"
-              src="http://placehold.it/900x400"
+              src={surveyImage}
               alt=""
             />
           </div>
           <div className="col-lg-5">
-            <h1 className="font-weight-light">Home</h1>
-            <p>
-
-            </p>
+          <SignInForm  onChangeLogin={handleLogin}/>
           </div>
         </div>
       </div>

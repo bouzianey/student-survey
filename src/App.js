@@ -14,8 +14,8 @@ import DisplayFeedbackList from "./components/FeedbackList";
 
 function App() {
 
-        const [loggedInStatus, setloggedInStatus] = useState("NOT_LOGGED_IN");
-        const [user, setUser] = useState({});
+    const [loggedInStatus, setloggedInStatus] = useState("NOT_LOGGED_IN");
+    const [user, setUser] = useState({});
 
   const checkLoginStatus= (id) => {
 
@@ -56,22 +56,17 @@ function App() {
 
       setloggedInStatus(val);
       setUser({});
-      console.log("Log out : ",loggedInStatus);
-
   }
-
   const handleLogin = (data) => {
-      console.log(data);
-    setloggedInStatus("LOGGED_IN")
-      setUser(data)
+    setloggedInStatus("LOGGED_IN");
+    setUser(data);
   }
-
   return (
     <div className="App">
       <Router>
         <Navigation loggedInStatus={loggedInStatus}/>
         <Switch>
-          <Route path="/" exact component={() => <Home />} />
+          <Route path="/" exact component={() => <Home onChangeLogin={handleLogin}/>} />
           <Route path="/SurveyResponse"
                  exact component={() => loggedInStatus  === "LOGGED_IN" ? <DisplayStudentSurvey  user={user}/> : ""}
           />

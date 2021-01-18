@@ -24,7 +24,7 @@ const DisplayFeedbackList = ({user}) =>{
                 method: "POST",
                 headers: {
                 "Content-type": "application/json",
-                "Access-Control-Allow-Origin":"*"
+                //"Access-Control-Allow-Origin":"*"
               },
                 body: JSON.stringify(objToSend),
             })
@@ -45,7 +45,7 @@ const DisplayFeedbackList = ({user}) =>{
                     }
                   }
                   else {
-                      console.log("There isn't any feedback provided yet!")
+                      alert("There isn't any feedback provided yet!")
                   }
                     const data = {
                               columns: [

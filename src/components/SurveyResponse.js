@@ -27,7 +27,6 @@ const SurveyResponse = ({user, surveyID, onChangeClose}) => {
         const formValid = () => {
 
             let valid = true;
-            console.log(formErrorsState);
             // validate form errors being empty & the form was filled out
             Object.values(formErrorsState).forEach(val => {
               val.check_point === "invalid" && (valid = false);
@@ -92,7 +91,6 @@ const SurveyResponse = ({user, surveyID, onChangeClose}) => {
 
             Object.values(rps.options).forEach(val => {
                 val.content === "" && (checker = "invalid");
-                console.log(checker);
             });
 
             if(checker === "valid"){
@@ -118,7 +116,7 @@ const SurveyResponse = ({user, surveyID, onChangeClose}) => {
                 method: "POST",
                 headers: {
                 "Content-type": "application/json",
-                "Access-Control-Allow-Origin":"*"
+                //"Access-Control-Allow-Origin":"*"
               },
                 body: JSON.stringify(objectToSend1),
             })

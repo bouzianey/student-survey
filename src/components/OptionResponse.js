@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import logo from "../logo.svg";
 import "../App.css";
 import PropTypes from 'prop-types';
 
@@ -14,11 +13,10 @@ const OptionComponent = ({ idx, i,  questionID, option, onOptionChange}) => {
         const value = e.target.value;
         setOptionContent(value);
         onOptionChange(e, idx, value);
-
   };
     return (
         <tr key={i} >
-            <td><h6 htmlFor='{optionID}'>{option.content}</h6></td>
+            <td><h6>{option.content}</h6></td>
             <td>
                 <input className="" type="radio" id="1" name={i+n} value="1" onChange={handleOptionResponseChange}/>
             </td>

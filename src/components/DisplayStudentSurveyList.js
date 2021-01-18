@@ -25,7 +25,7 @@ const DisplayStudentSurvey = ({user}) =>{
                 method: "POST",
                 headers: {
                 "Content-type": "application/json",
-                "Access-Control-Allow-Origin":"*"
+                //"Access-Control-Allow-Origin":"*"
               },
                 body: JSON.stringify(objToSend),
             })
@@ -114,7 +114,7 @@ const DisplayStudentSurvey = ({user}) =>{
 
   return (
     <div className="wrapper" id="1">
-        <h2>List of Current Surveys</h2>
+        <h2>List of Pending Surveys</h2>
         <div id="DataGrid">
             <MDBDataTable
                 striped

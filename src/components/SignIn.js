@@ -1,4 +1,5 @@
-import React, { useState ,Component } from "react";
+import React, { useState } from "react";
+import {useHistory} from 'react-router-dom';
 import "./SignIn.css";
 
 
@@ -8,21 +9,19 @@ const SignInForm = ({onChangeLogin}) => {
     const [passwordState, setpasswordState] = useState(null);
     const [surveySuccessState, setSurveySuccessState] = useState("");
     const [formErrorsState, setformErrorsState] = useState({email:"", password:""});
-
     const emailRegex = RegExp(
   /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
     );
-
+    //History
+    const history = useHistory();
     const formValid = () => {
       let valid = true;
       // validate form errors being empty & the form was filled out
       Object.values(formErrorsState).forEach(val => {
         val.length > 0 && (valid = false);
       });
-
       return valid;
     };
-
   const handleSubmit = (e) => {
 
     e.preventDefault();
@@ -32,21 +31,20 @@ const SignInForm = ({onChangeLogin}) => {
             email: emailState,
             password: passwordState
         }
-        console.log(objectToSend);
       fetch("https://survey-manager-yb-scsu.herokuapp.com/login_student", {
                 method: "POST",
-                mode: "no-cors",
+                //mode: "no-cors",
                 headers: {
                 "Content-type": "application/json",
                 //"Access-Control-Allow-Origin":"*"
               },
                 body: JSON.stringify(objectToSend),
             })
-              //.then((res) => res.json())
+              .then((res) => res.json())
               .then((res) => {
-                  console.log(res);
                   if (res.logged_in){
-                      onChangeLogin(res.user)
+                      onChangeLogin(res.user);
+                      history.push("/SurveyResponse");
                   }
                    else
                   {
