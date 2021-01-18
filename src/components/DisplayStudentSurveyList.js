@@ -12,6 +12,7 @@ const DisplayStudentSurvey = ({user}) =>{
         const [isShown, setShown] = useState(false);
         const [isShownButton, setShownButton] = useState(false);
         const [isShownModButton, setShownModButton] = useState(false);
+        const [refreshSurveyList,setRefreshSurveyList] = useState(false);
         const [dataObj, setDataObj] = useState({});
 
         useEffect(() => {
@@ -84,7 +85,7 @@ const DisplayStudentSurvey = ({user}) =>{
               });
       };
     displaySurveyList();
-  }, []);
+  }, [refreshSurveyList]);
         const displaySurvey = (id) => {
 
             setSurveyID(id);
@@ -108,6 +109,7 @@ const DisplayStudentSurvey = ({user}) =>{
                 if (val.length > 0)
                 {
                     document.getElementById("popup-alert").style.display = "block";
+                    setRefreshSurveyList(true);
                 }
                 closeForm_Instructions();
             }

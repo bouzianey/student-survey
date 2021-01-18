@@ -175,7 +175,6 @@ const SurveyResponse = ({user, surveyID, onChangeClose}) => {
                 body: JSON.stringify(objectToSend),
                 }).then(res => res.json())
                 handleCloseChange("Survey was successfully submitted");
-
             }else{
                 setformResultState("Survey Invalid! make sure you answer all questions");
             }
@@ -198,11 +197,15 @@ const SurveyResponse = ({user, surveyID, onChangeClose}) => {
             }
           </>
         ))}
-        <input type="submit" className="btn-danger" onClick={(id) =>handleCloseChange("")}value="Close"/>
-        <input type="submit" className="btn-primary" onClick={submitSurveyResponse} value="Submit Response" />
-        {formResultState === "Survey Invalid! make sure you answer all questions" && (
+        <div align="center">
+            <input type="submit" className="btn-danger" onClick={(id) =>handleCloseChange("")}value="Close"/>
+            <input type="submit" className="btn-primary" onClick={submitSurveyResponse} value="Submit Response" />
+        </div>
+        <div align="center">
+            {formResultState === "Survey Invalid! make sure you answer all questions" && (
                     <span className="errorMessage">{formResultState}</span>
-        )}
+            )}
+        </div>
     </div>
   );
 }
